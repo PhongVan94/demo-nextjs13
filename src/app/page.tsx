@@ -2,7 +2,6 @@
 import Link from "next/link"
 import x from '@/styles/app.module.css';
 import AppTable from "@/components/app.table";
-import { useEffect } from "react";
 import useSWR from 'swr'
 
 
@@ -21,16 +20,9 @@ export default function Home() {
       }
     )
 
-
-  // useEffect(() => {
-
-  //   const fetchData = async () => {
-  //     const res = await fetch("http://localhost:8000/blogs")
-  //     const data = await res.json();
-  //     console.log(">> check res:", data);
-  //   }
-  //   fetchData();
-  // }, [])
+  if (!data) {
+    return <div>loading...</div>
+  }
 
   return (
     <div>
@@ -54,7 +46,9 @@ export default function Home() {
           </Link>
         </li>
       </ul>
-      <AppTable />
+      <AppTable
+        blogs={data?.sort((a: any, b: any) => b.id - a.id)}
+      />
     </div >
   )
 
