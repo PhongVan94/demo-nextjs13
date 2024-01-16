@@ -3,20 +3,40 @@ import Link from "next/link"
 import x from '@/styles/app.module.css';
 import AppTable from "@/components/app.table";
 import { useEffect } from "react";
+import useSWR from 'swr'
+
 
 export default function Home() {
 
-  useEffect(() => {
-    const fetchData = async () => {
-      const res = await fetch("http://localhost:8000/blogs")
-      const data = await res.json();
-      console.log(">> check res:", data);
-    }
-    fetchData();
-  }, [])
+  const fetcher = (url: string) => fetch(url)
+    .then(r => r.json())
+
+  const { data, error, isLoading } = useSWR
+    ("http://localhost:8000/blogs"
+      , fetcher,
+      {
+        revalidateIfStale: false,
+        revalidateOnFocus: false,
+        revalidateOnReconnect: false
+      }
+    )
+
+
+  // useEffect(() => {
+
+  //   const fetchData = async () => {
+  //     const res = await fetch("http://localhost:8000/blogs")
+  //     const data = await res.json();
+  //     console.log(">> check res:", data);
+  //   }
+  //   fetchData();
+  // }, [])
 
   return (
     <div>
+
+      <div>{data?.length}</div>
+
       <ul>
         <li className={x['red']}>
           <Link href={"/facebook"}>
@@ -24,14 +44,14 @@ export default function Home() {
           </Link>
         </li>
         <li>
-          <a href="/youtube">
+          <Link href="/youtube">
             Youtube
-          </a>
+          </Link>
         </li>
         <li>
-          <a href="/tiktok">
+          <Link href="/tiktok">
             TikTok
-          </a>
+          </Link>
         </li>
       </ul>
       <AppTable />
