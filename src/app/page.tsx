@@ -1,7 +1,11 @@
-'use client'
 import Link from "next/link"
 import x from '@/styles/app.module.css';
+import { Metadata } from "next";
 
+export const metadata: Metadata = {
+  title: 'HomePage',
+  description: 'Hello',
+}
 
 
 export default function Home() {
